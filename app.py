@@ -10,7 +10,7 @@ idempotency_key = str(uuid.uuid4())
 def index():
     return render_template('index.html')
 
-@app.route('/charge', methods=['POST','GET'])
+@app.route(methods=['GET'])
 def charge():
     amount = int(request.form['amount'])
     email = request.form['email']
