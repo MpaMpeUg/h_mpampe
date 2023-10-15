@@ -10,7 +10,7 @@ idempotency_key = str(uuid.uuid4())
 def index():
     return render_template('index.html')
 
-@app.route(methods=['GET'])
+@app.route('/charge', methods=['POST','GET'])
 def charge():
     amount = int(request.form['amount'])
     email = request.form['email']
@@ -34,8 +34,8 @@ def charge():
     )
 
     if result.is_success():
-        response_data = result.json()
-        print(result.body)
+        response_data = result.body
+        # print(result.body)
     elif result.is_error():
         print(result.errors)
         
@@ -47,17 +47,10 @@ def charge():
 
     if payment_url:
         print(f'Payment URL for redirection: {payment_url}')
+        return redirect(payment_url)
     else:
         print('Payment URL not found in the response.')
 
-
-    # return response.json()
-    redirect_url = response_data.get('data', {}).get('link', '')  # Get the redirect URL from the response data
-
-    if redirect_url:
-        return redirect(redirect_url)
-    else:
-        return "Payment initiation failed."
 
 @app.route('/images/<filename>')
 def get_image(filename):
